@@ -1,0 +1,26 @@
+name: Manual Release & Deploy
+
+on:
+  workflow_dispatch:  # <-- manueller Start
+
+jobs:
+  release:
+    name: Create Release
+    uses: ./.github/workflows/semantic_release.yml
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    secrets: inherit
+
+  build_deploy:
+    name: Build & Push Docker Image
+    needs: release
+    if: needs.release.outputs.published == '1'
+    uses: ./.github/workflows/build_and_deploy.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      tag: ${{ needs.release.outputs.version }}
+    secrets: inherit
