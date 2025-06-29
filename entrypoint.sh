@@ -79,10 +79,9 @@ convert_ts_to_mp4() {
         fi
 
         echo "Converting '${ts_file}' to '${mp4_file}'..."
-
+        # Use ffmpeg to convert .ts to .mp4 with audio normalization
         ffmpeg -y -i "${ts_file}" \
           -hide_banner -loglevel error \
-          # Map the first video stream and (optionally) the first audio stream; if multiple streams exist, only the first of each is selected.
           -map 0:v -map 0:a? \
           -af "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=summary" \
           -c:v copy -c:a aac -b:a 192k \
