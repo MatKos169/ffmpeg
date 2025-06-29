@@ -1,3 +1,4 @@
+#!/bin/sh
 : '
 entrypoint.sh - Script to convert .ts files to .mp4 using ffmpeg with audio normalization.
 
@@ -40,7 +41,6 @@ Override environment variables as needed, then run the script.
 Example:
     OUTPUTFOLDER=my_streamer WORKDIR=/input SLEEPTIME=300 ./entrypoint.sh
 '
-#!/bin/sh
 
 set -e
 
