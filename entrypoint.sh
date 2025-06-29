@@ -49,7 +49,10 @@ convert_ts_to_mp4() {
     log "🔍 Starte Konvertierung der .ts-Dateien in ${WORKDIR}..."
     failed_count=0
 
-    find "${WORKDIR}" -maxdepth 1 -type f -name "*.ts" -print0 | while IFS= read -r -d '' ts_file; do
+    shopt -s nullglob
+    ts_files=("${WORKDIR}"/*.ts)
+
+    for ts_file in "${ts_files[@]}"; do
         year=$(date -r "${ts_file}" "+%Y")
         month=$(date -r "${ts_file}" "+%m")
 
@@ -92,6 +95,7 @@ convert_ts_to_mp4() {
     export FAILED_COUNT=$failed_count
 }
 
+log "🚀 Starte Konvertierung von .ts Dateien zu .mp4..."
 convert_ts_to_mp4
 
 if [ "${FAILED_COUNT:-0}" -eq 0 ]; then
