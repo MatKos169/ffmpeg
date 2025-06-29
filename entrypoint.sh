@@ -49,16 +49,7 @@ convert_ts_to_mp4() {
     log "🔍 Starte Konvertierung der .ts-Dateien in ${WORKDIR}..."
     failed_count=0
 
-    shopt -s nullglob
-    ts_files=("${WORKDIR}"/*.ts)
-
-    if [ ${#ts_files[@]} -eq 0 ]; then
-        log "ℹ️ Keine .ts-Dateien im Verzeichnis ${WORKDIR} gefunden. Beende Konvertierung."
-        export FAILED_COUNT=0
-        return 0
-    fi
-
-    for ts_file in "${ts_files[@]}"; do
+    find "${WORKDIR}" -maxdepth 1 -type f -name "*.ts" -print0 | while IFS= read -r -d '' ts_file; do
         year=$(date -r "${ts_file}" "+%Y")
         month=$(date -r "${ts_file}" "+%m")
 
@@ -79,7 +70,12 @@ convert_ts_to_mp4() {
         log "🎞️  Konvertiere '${ts_file}' → '${mp4_file}'..."
         CURRENT_MP4="${mp4_file}"
 
-        ffmpeg -y -nostdin -i "${ts_file}" -hide_banner -loglevel error -map 0:v -map 0:a? -af "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=summary" -c:v copy -c:a aac -b:a 192k "${mp4_file}"
+        ffmpeg -y -nostdin -i "${ts_file}" \
+            -hide_banner -loglevel error \
+            -map 0:v -map 0:a? \
+            -af "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=summary" \
+            -c:v copy -c:a aac -b:a 192k \
+            "${mp4_file}"
 
         if [ $? -eq 0 ]; then
             log "✅ Erfolgreich konvertiert: '${mp4_file}'"
@@ -96,7 +92,6 @@ convert_ts_to_mp4() {
     export FAILED_COUNT=$failed_count
 }
 
-log "🚀 Starte Konvertierung von .ts Dateien zu .mp4..."
 convert_ts_to_mp4
 
 if [ "${FAILED_COUNT:-0}" -eq 0 ]; then
