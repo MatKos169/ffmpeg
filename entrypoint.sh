@@ -77,8 +77,7 @@ convert_ts_to_mp4() {
             -hide_banner -loglevel error \
             -map 0:v -map 0:a? \
             -c:v copy \
-            -af "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=summary" \
-            -c:a aac -b:a 192k \
+            -c:a aac -b:a 192k -af "loudnorm=I=-14:TP=-1.5:LRA=11" \
             "${mp4_file}"
 
         if [ $? -eq 0 ]; then
