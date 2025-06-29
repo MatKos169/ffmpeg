@@ -71,12 +71,12 @@ convert_ts_to_mp4() {
         log "🎞️  Konvertiere '${ts_file}' → '${mp4_file}'..."
         CURRENT_MP4="${mp4_file}"
 
-        ffmpeg -y -nostdin -i "${ts_file}" \
-            -hide_banner -loglevel error \
+        ffmpeg -y -nostdin -hide_banner -loglevel error \
+            -i "${ts_file}" \
             -map 0:v -map 0:a? \
             -c:v copy \
-            -c:a aac -b:a 192k \
             -af "loudnorm=I=-14:TP=-1.5:LRA=11" \
+            -c:a aac -b:a 192k \
             "${mp4_file}"
 
         if [ $? -eq 0 ]; then
