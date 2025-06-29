@@ -1,8 +1,6 @@
 #!/bin/bash
 : '
 entrypoint.sh - Script to convert .ts files to .mp4 using ffmpeg with audio normalization.
-
-Automatisiert die Konvertierung von .ts-Dateien zu .mp4 mit Audio-Normalisierung.
 '
 
 set -e
@@ -77,7 +75,8 @@ convert_ts_to_mp4() {
             -hide_banner -loglevel error \
             -map 0:v -map 0:a? \
             -c:v copy \
-            -c:a aac -b:a 192k -af "loudnorm=I=-14:TP=-1.5:LRA=11" \
+            -c:a aac -b:a 192k \
+            -af "loudnorm=I=-14:TP=-1.5:LRA=11" \
             "${mp4_file}"
 
         if [ $? -eq 0 ]; then
@@ -105,3 +104,4 @@ else
 fi
 
 sleep "$SLEEPTIME"
+log "⏰ Schlafzeit beendet. Starte erneut..."
