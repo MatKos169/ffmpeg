@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 : '
 entrypoint.sh - Script to convert .ts files to .mp4 using ffmpeg with audio normalization.
 
