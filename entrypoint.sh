@@ -80,12 +80,13 @@ convert_ts_to_mp4() {
 
         echo "Converting '${ts_file}' to '${mp4_file}'..."
         # Use ffmpeg to convert .ts to .mp4 with audio normalization
-        ffmpeg -y -i "${ts_file}" \
-          -hide_banner -loglevel error \
-          -map 0:v -map 0:a? \
-          -af "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=summary" \
-          -c:v copy -c:a aac -b:a 192k \
-          "${mp4_file}"
+        ffmpeg -y -nostdin -i "${ts_file}" \
+        -hide_banner -loglevel error \
+        -map 0:v -map 0:a? \
+        -af "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=summary" \
+        -c:v copy -c:a aac -b:a 192k \
+        "${mp4_file}"
+
 
         if [ $? -eq 0 ]; then
             echo "Successfully converted to '${mp4_file}'."
